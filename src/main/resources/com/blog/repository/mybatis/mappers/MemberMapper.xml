@@ -10,6 +10,25 @@
         values (#{memberNm}, #{memberEmail}, #{memberPwd}, now())
     </insert>
 
+    <!-- 멤버 권한 등록 -->
+    <insert id="insertAuthority" parameterType="List" useGeneratedKeys="true" keyProperty="authorityId">
+        insert into member_authority (member_id, auth_email, auth_role)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.memberId}, #{item.authEmail}, #{item.authRole})
+        </foreach>
+    </insert>
+
+    <!-- ResultMap 작성 -->
+    <resultMap id="memberAndAuthorityMap" type="com.blog.domain.Member">
+        <id property="memberId" column="member_id"/>
+        <result property="memberNm" column="member_nm"/>
+        <result property="memberEmail" column="member_email"/>
+        <result property="memberPwd" column="member_pwd"/>
+        <result property="memberRegdate" column="member_regdate"/>
+        <collection property="memberRoles" column="member_email" javaType="java.util.List" select="getAuthorityList"/>
+    </resultMap>
+
     <!-- * Main * email 로 조회 -->
     <select id="findByEmail" parameterType="String" resultMap="memberAndAuthorityMap">
         select
@@ -18,6 +37,16 @@
             member
         where
             member_email = #{email}
+    </select>
+
+    <!-- Nick Name 으로 조회-->
+    <select id="findByName" parameterType="String" resultMap="memberAndAuthorityMap">
+        select
+            member_id, member_nm, member_email, member_pwd, member_regdate
+        from
+            member
+        where
+            member_nm = #{memberNm}
     </select>
 
 </mapper>
