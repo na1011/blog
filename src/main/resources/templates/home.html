@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html th:replace="~{layouts/homeLayout :: homeLayout(~{::title}, ~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>home</title>
+</head>
+<body>
+
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-7 ms-auto me-2 my-2 p-3 bg-light border"></div>
+            <div class="col-3 me-auto ms-2 my-2 p-3 bg-light border text-center">
+                <p th:text="${memberName}"></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
