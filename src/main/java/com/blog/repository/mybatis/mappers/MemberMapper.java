@@ -7,5 +7,6 @@ import java.util.Optional;
 
 @Mapper
 public interface MemberMapper {
+    void save(Member member);
     Optional<Member> findByEmail(String email);
 }

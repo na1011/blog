@@ -3,6 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.blog.repository.mybatis.mappers.MemberMapper">
+    <!-- 멤버 등록 -->
+    <insert id="save" useGeneratedKeys="true" keyProperty="memberId">
+        insert into
+            member (member_nm, member_email, member_pwd, member_regdate)
+        values (#{memberNm}, #{memberEmail}, #{memberPwd}, now())
+    </insert>
+
     <!-- * Main * email 로 조회 -->
     <select id="findByEmail" parameterType="String" resultMap="memberAndAuthorityMap">
         select
