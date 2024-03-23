@@ -49,4 +49,13 @@
             member_nm = #{memberNm}
     </select>
 
+    <!-- Collection (SELECT Authority) -->
+    <select id="getAuthorityList" parameterType="String" resultType="String">
+        select
+            auth_role
+        from
+            member_authority
+        where
+            auth_email = #{memberEmail}
+    </select>
 </mapper>
