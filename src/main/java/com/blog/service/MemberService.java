@@ -3,6 +3,7 @@ package com.blog.service;
 import com.blog.common.exception.DuplicateException;
 import com.blog.domain.Authority;
 import com.blog.domain.Member;
+import com.blog.model.Role;
 import com.blog.model.member.MemberSaveDto;
 import com.blog.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
