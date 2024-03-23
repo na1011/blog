@@ -29,7 +29,7 @@ public class MyBatisMemberRepository implements MemberRepository {
 
     @Override
     public Optional<Member> findByEmail(String email) {
-        return Optional.empty();
+        return memberMapper.findByEmail(email);
     }
 
     @Override
