@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blog.repository.mybatis.mappers.BoardMapper">
+    <sql id="boardColumns">
+        board_id, member_id, board_writer, board_title, board_content, board_regdate, board_update_date, board_delete_date
+    </sql>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="boardId">
+        insert into
+            board (member_id, board_writer, board_title, board_content, board_regdate)
+        values
+            (#{memberId}, #{boardWriter}, #{boardTitle}, #{boardContent}, now())
+    </insert>
+
+    <select id="findByMemberId" resultType="com.blog.domain.Board">
+        select
+        <include refid="boardColumns"/>
+        from
+        board
+        where
+        member_id = #{memberId}
+    </select>
+
+    <select id="findById" resultType="com.blog.domain.Board">
+        select
+        <include refid="boardColumns"/>
+        from
+        board
+        where
+        board_id = #{boardId}
+    </select>
+
+    <!-- 페이지네이션 -->
+    <!-- board_delete_date 가 존재 시 삭제 된 게시글이므로 포함하지 않는다. -->
+    <!-- 키워드로 검색하기, 최근 순 정렬 -->
+    <select id="findAll" parameterType="com.blog.model.board.BoardSearchDto" resultType="com.blog.domain.Board">
+        select
+        <include refid="boardColumns"/>
+        from
+        board as b
+        where
+        <choose>
+            <when test="'title'.equals(searchType)">
+                b.board_title like CONCAT('%', #{keyword}, '%') and
+            </when>
+            <when test="'writer'.equals(searchType)">
+                b.board_writer like CONCAT('%', #{keyword}, '%') and
+            </when>
+        </choose>
+        b.board_delete_date is null
+        order by
+        b.board_regdate desc limit #{pagination.limitStart}, #{recordSize}
+    </select>
+
+    <!-- UPDATE -->
+    <update id="updateByBoard" parameterType="com.blog.domain.Board">
+        update
+            board as b
+        set
+            b.board_title = #{boardTitle},
+            b.board_content = #{boardContent},
+            b.board_update_date = now()
+        where
+            b.board_id = #{boardId} and b.member_id = #{memberId}
+    </update>
+
+    <!-- DELETE Setup -->
+    <update id="deleteSetupByBoardIdAndMemberId">
+        update
+            board as b
+        set
+            b.board_delete_date = now()
+        where
+            b.board_id = #{boardId} and b.member_id = #{memberId}
+    </update>
+
+    <delete id="remove">
+        delete from
+            board
+        where
+            board_id = #{boardId}
+    </delete>
+
+    <select id="getPageMaxCount" parameterType="com.blog.model.board.BoardSearchDto" resultType="Integer">
+        select
+        count(*)
+        from
+        board as b
+        where
+        <choose>
+            <when test="'title'.equals(searchType)">
+                b.board_title like CONCAT('%', #{keyword}, '%') and
+            </when>
+            <when test="'writer'.equals(searchType)">
+                b.board_writer like CONCAT('%', #{keyword}, '%') and
+            </when>
+        </choose>
+        b.board_delete_date is null
+    </select>
+</mapper>
