@@ -33,13 +33,13 @@ public class MybatisBoardRepository implements BoardRepository {
     }
 
     @Override
-    public List<Board> findAll(BoardSearchDto params) {
-        return null;
+    public List<Board> findAll(BoardSearchDto search) {
+        return boardMapper.findAll(search);
     }
 
     @Override
     public Integer getPageMaxCount(BoardSearchDto search) {
-        return null;
+        return boardMapper.getPageMaxCount(search);
     }
 
     @Override
