@@ -1,5 +1,6 @@
 package com.blog.domain;
 
+import com.blog.model.board.BoardDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,4 +32,16 @@ public class Board {
         this.boardDeleteDate = boardDeleteDate;
     }
 
+    public BoardDto toDto() {
+        return BoardDto.builder()
+                .boardId(boardId)
+                .memberId(memberId)
+                .boardWriter(boardWriter)
+                .boardTitle(boardTitle)
+                .boardContent(boardContent)
+                .boardRegdate(boardRegdate)
+                .boardUpdateDate(boardUpdateDate)
+                .boardDeleteDate(boardDeleteDate)
+                .build();
+    }
 }

@@ -9,7 +9,106 @@
 <section>
     <!-- /* 리스트 데이터 렌더링 영역 */ -->
     <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            /*<![CDATA[*/
 
+            window.onload = () => {
+                // 페이지가 로드되었을 때, 딱 한 번만 함수를 실행
+                findAllPost();
+            }
+
+            // 게시글 리스트 조회
+            function findAllPost() {
+
+                // 1. PagingResponse 의 멤버인 List<T> 타입의 list 를 의미
+                const list = [[ ${response.list} ]];
+
+                // 2. 리스트가 비어있는 경우, 행에 "검색 결과가 없다"는 메시지를 출력하고, 페이지 번호(페이지네이션) HTML 을 제거(초기화)한 후 로직을 종료
+                if ( !list.length ) {
+                    document.getElementById('list').innerHTML = '<div>검색된 결과가 없습니다.</div>';
+                    drawPage();
+                }
+
+                // 3. PagingResponse 의 멤버인 pagination 을 의미
+                const pagination = [[ ${response.pagination} ]];
+
+                // 4. @ModelAttribute 를 이용해서 뷰(HTML)로 전달한 SearchDto 타입의 객체인 params 를 의미
+                const params = [[ ${params} ]];
+
+                // 5. 페이지 번호 렌더링
+                drawPage(pagination, params);
+            }
+
+            // 페이지 HTML draw
+            function drawPage(pagination, params) {
+
+                // 1. 필수 파라미터가 없는 경우, 페이지 번호(페이지네이션) HTML 을 제거(초기화)한 후 로직 종료
+                if ( !pagination || !params ) {
+                    document.querySelector('.paging').innerHTML = '';
+                    return;
+                }
+
+                // 2. 렌더링 할 HTML 을 저장할 변수
+                let html = '';
+
+                // 3. 이전 페이지가 있는 경우, 즉 시작 페이지(startPage)가 1이 아닌 경우 첫 페이지 버튼과 이전 페이지 버튼을 HTML 에 추가
+                if (pagination.existPrevPage) {
+                    html += `
+                        <li class="page-item"><a href="javascript:void(0);" onclick="movePage(1)" class="page-link">&laquo;</a></li>
+                         <li class="page-item"><a href="javascript:void(0);" onclick="movePage(${pagination.startPage - 1})" class="page-link" aria-label="Previous">&lt;</a></li>
+                    `;
+                }
+
+                /*
+                 * 4. 시작 페이지(startPage)와 끝 페이지(endPage) 사이의 페이지 번호(i)를 넘버링 하는 로직
+                 *    페이지 번호(i)와 현재 페이지 번호(params.page)가 동일한 경우, 페이지 번호(i)를 활성화(on) 처리
+                 */
+                for (let i = pagination.startPage; i <= pagination.endPage; i++) {
+                    html += (i !== params.page)
+                        ? `<li class="page-item"><a href="javascript:void(0);" onclick="movePage(${i});" class="page-link">${i}</a></li>`
+                        : `<li class="page-item disabled"><span class="page-link">${i}</span></li>`
+                }
+
+                // 5. 현재 위치한 페이지 뒤에 데이터가 더 있는 경우, 다음 페이지 버튼과 끝 페이지 버튼을 HTML 에 추가
+                if (pagination.existNextPage) {
+                    html += `
+                         <li class="page-item"><a href="javascript:void(0);" onclick="movePage(${pagination.endPage + 1});" class="page-link" aria-label="Next">&gt;</a></li>
+                         <li class="page-item"><a href="javascript:void(0);" onclick="movePage(${pagination.totalPageCount});" class="page-link">&raquo;</a></li>
+                    `;
+                }
+
+                // 6. class가 "paging"인 요소를 찾아 HTML을 렌더링
+                document.querySelector('.paging').innerHTML = html;
+            }
+
+
+            // 페이지 이동
+            function movePage(page) {
+                var urlObj = new URL(window.location.href);
+                var urlSearchObj = new URLSearchParams(urlObj.search);
+
+                // searchType, keyword 로 된 검색 조건이 있는지 확인
+                const searchType = urlSearchObj.get('searchType');
+                const keyword = urlSearchObj.get('keyword');
+
+                // 1. drawPage( )의 각 버튼에 선언된 onclick 이벤트를 통해 전달받는 page(페이지 번호)를 기준으로 객체 생성
+                const queryParams = {
+                    searchType: searchType,
+                    keyword: keyword,
+                    page: (page) ? page : 1,
+                    recordSize: 10,
+                    pageSize: 10
+                }
+
+                /*
+                 * 2. location.pathname : 리스트 페이지의 URI 를 의미
+                 *    new URLSearchParams(queryParams).toString() : queryParams 의 모든 프로퍼티(key-value)를 쿼리 스트링으로 변환
+                 *    URI + 쿼리 스트링에 해당하는 주소로 이동
+                 */
+                location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
+            }
+            /*]]>*/
+        </script>
     </th:block>
 
     <div class="container w-75 p-1 my-2">
