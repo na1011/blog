@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +27,7 @@ public class BoardController {
     private final BoardService boardService;
 
     /**
-     * 게시글 보기 뷰
+     * 게시글 목록 뷰
      */
     @GetMapping()
     public String boardForm(@ModelAttribute("params") final BoardSearchDto params,
@@ -42,6 +39,24 @@ public class BoardController {
         model.addAttribute("searchTypeList", searchTypeList);
         return "board";
     }
+
+    /**
+     * 게시글 보기 뷰
+     */
+    @GetMapping("/{boardId}")
+    public String boardDetailForm(@AuthenticationPrincipal MemberDetailsDto memberDetailsDto,
+                                  @PathVariable("boardId") Long boardId,
+                                  Model model) {
+
+        BoardDto boardDto = boardService.findBoardAndFiles(boardId);
+
+        model.addAttribute("authMemberId", memberDetailsDto.getMember().getMemberId()); // 파일 삭제 하기 위한 model 속성
+        model.addAttribute("authMemberNm", memberDetailsDto.getMember().getMemberNm());
+        model.addAttribute("boardDto", boardDto);
+
+        return "boardDetail";
+    }
+
 
     /**
      * 게시글 쓰기 뷰
