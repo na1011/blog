@@ -87,6 +87,7 @@ public class BoardController {
     @GetMapping("/writeView")
     public String boardWriteFrom(@ModelAttribute BoardSaveDto boardSaveDto,
                                  Model model) {
+        model.addAttribute("fileMaxSize", fileMaxSize);
         return "boardWrite";
     }
 
