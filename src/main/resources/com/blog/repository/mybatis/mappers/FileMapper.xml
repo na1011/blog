@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="hello.board.pagging.repository.mybatis.FileMapper">
+<mapper namespace="com.blog.repository.mybatis.mappers.FileMapper">
     <sql id="fileColumns">
         file_id, board_id, upload_file_name, store_file_name, file_image_yn, file_regdate
     </sql>
@@ -24,7 +24,7 @@
     </insert>
 
     <!-- 찾고자하는 파일 -->
-    <select id="findByBoardIdAndFileImageYn" resultType="hello.board.pagging.domain.File">
+    <select id="findByBoardIdAndFileImageYn" resultType="com.blog.domain.File">
         select
             <include refid="fileColumns"/>
         from
@@ -33,7 +33,7 @@
             board_id = #{boardId} and file_image_yn = #{fileImageYn}
     </select>
 
-    <select id="findById" parameterType="Long" resultType="hello.board.pagging.domain.File">
+    <select id="findById" parameterType="Long" resultType="com.blog.domain.File">
         select
             <include refid="fileColumns"/>
         from
@@ -42,7 +42,7 @@
             file_id = #{fileId}
     </select>
 
-    <select id="findByBoardId" parameterType="Long" resultType="hello.board.pagging.domain.File">
+    <select id="findByBoardId" parameterType="Long" resultType="com.blog.domain.File">
         select
             <include refid="fileColumns"/>
         from
@@ -51,7 +51,7 @@
             board_id = #{boardId}
     </select>
 
-    <select id="findByStoreFileName" parameterType="String" resultType="hello.board.pagging.domain.File">
+    <select id="findByStoreFileName" parameterType="String" resultType="com.blog.domain.File">
         select
             <include refid="fileColumns"/>
         from
