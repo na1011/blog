@@ -71,7 +71,7 @@ public class BoardService {
      * @return BoardDto
      */
     @Transactional(readOnly = true)
-    public BoardDto findBoard(Long boardId) {
+    public BoardDto findBoardAndFiles(Long boardId) {
         // boardId 로 된 File 이 있는지 조회
         Optional<BoardFile> BoardFileOptional = boardRepository.findBoardFileById(boardId);
 
