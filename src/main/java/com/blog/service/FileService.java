@@ -2,6 +2,7 @@ package com.blog.service;
 
 import com.blog.domain.Board;
 import com.blog.domain.File;
+import com.blog.model.FileStore;
 import com.blog.model.UploadFile;
 import com.blog.model.board.BoardModifyDto;
 import com.blog.model.board.BoardSaveDto;
