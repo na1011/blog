@@ -73,7 +73,7 @@ public class BoardService {
     @Transactional(readOnly = true)
     public BoardDto findBoard(Long boardId) {
         // boardId 로 된 File 이 있는지 조회
-        Optional<BoardFile> BoardFileOptional = boardRepository.findBoard(boardId);
+        Optional<BoardFile> BoardFileOptional = boardRepository.findBoardFileById(boardId);
 
         // 조회된 데이터가 존재 하지 않을 경우 예외 발생
         BoardFile boardFile = BoardFileOptional.orElseThrow(() -> new BadRequestException("존재하지 않은 게시글입니다."));
