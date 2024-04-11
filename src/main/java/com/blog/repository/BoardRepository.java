@@ -1,6 +1,7 @@
 package com.blog.repository;
 
 import com.blog.domain.Board;
+import com.blog.domain.BoardFile;
 import com.blog.model.board.BoardSearchDto;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface BoardRepository {
     void deleteSetupByBoardIdAndMemberId(Long boardId, Long memberId);
     void updateByBoard(Board board);
     void remove(Long boardId);
+    Optional<BoardFile> findBoardFileById(Long id);
 }

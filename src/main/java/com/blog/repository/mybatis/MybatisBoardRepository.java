@@ -1,6 +1,7 @@
 package com.blog.repository.mybatis;
 
 import com.blog.domain.Board;
+import com.blog.domain.BoardFile;
 import com.blog.model.board.BoardSearchDto;
 import com.blog.repository.BoardRepository;
 import com.blog.repository.mybatis.mappers.BoardMapper;
@@ -55,5 +56,10 @@ public class MybatisBoardRepository implements BoardRepository {
     @Override
     public void remove(Long boardId) {
 
+    }
+
+    @Override
+    public Optional<BoardFile> findBoardFileById(Long id) {
+        return boardMapper.findBoardFileById(id);
     }
 }

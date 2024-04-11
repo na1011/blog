@@ -1,6 +1,7 @@
 package com.blog.repository.mybatis.mappers;
 
 import com.blog.domain.Board;
+import com.blog.domain.BoardFile;
 import com.blog.model.board.BoardSearchDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -18,4 +19,5 @@ public interface BoardMapper {
     void deleteSetupByBoardIdAndMemberId(@Param("boardId") Long boardId, @Param("memberId") Long memberId);
     void remove(Long boardId);
     Integer getPageMaxCount(BoardSearchDto search);
+    Optional<BoardFile> findBoardFileById(Long id);
 }
