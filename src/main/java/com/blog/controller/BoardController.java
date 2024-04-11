@@ -55,23 +55,6 @@ public class BoardController {
     }
 
     /**
-     * 게시글 보기 뷰
-     */
-    @GetMapping("/{boardId}")
-    public String boardDetailForm(@AuthenticationPrincipal MemberDetailsDto memberDetailsDto,
-                                  @PathVariable("boardId") Long boardId,
-                                  Model model) {
-
-        BoardDto boardDto = boardService.findBoardAndFiles(boardId);
-
-        model.addAttribute("authMemberId", memberDetailsDto.getMember().getMemberId()); // 파일 삭제 하기 위한 model 속성
-        model.addAttribute("authMemberNm", memberDetailsDto.getMember().getMemberNm());
-        model.addAttribute("boardDto", boardDto);
-
-        return "boardDetail";
-    }
-
-    /**
      * 게시글 상세 보기 뷰 (게시글, 파일, 댓글 불러오기)
      */
     @GetMapping("/{boardId}")
@@ -105,17 +88,6 @@ public class BoardController {
     public String boardWriteFrom(@ModelAttribute BoardSaveDto boardSaveDto,
                                  Model model) {
         return "boardWrite";
-    }
-
-    /**
-     * 게시글 작성
-     */
-    @PostMapping("/write")
-    public String boardWrite(@AuthenticationPrincipal MemberDetailsDto memberDetailsDto,
-                             @ModelAttribute BoardSaveDto boardSaveDto) {
-        boardService.createBoard(boardSaveDto, memberDetailsDto.getMember());
-
-        return "redirect:/board";
     }
 
     /**

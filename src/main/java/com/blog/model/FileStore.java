@@ -1,6 +1,6 @@
 package com.blog.model;
 
-import hello.board.pagging.common.code.ImageCode;
+import com.blog.common.code.ImageCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -52,8 +52,8 @@ public class FileStore {
      * 파일 삭제를 모두 성공하였을 때 true
      * 파일 삭제가 안되었을 때 false
      */
-    public boolean removeFiles(List<hello.board.pagging.domain.File> fileList) {
-        for (hello.board.pagging.domain.File file : fileList) {
+    public boolean removeFiles(List<com.blog.domain.File> fileList) {
+        for (com.blog.domain.File file : fileList) {
             File removeFile = new File(getFullPath(file.getStoreFileName()));
             log.info("파일삭제 : {}, {}", file.getFileId(), file.getStoreFileName());
             if (!removeFile.delete()) {
