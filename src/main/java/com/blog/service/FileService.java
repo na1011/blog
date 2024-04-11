@@ -1,5 +1,6 @@
 package com.blog.service;
 
+import com.blog.common.exception.CustomFileUploadException;
 import com.blog.domain.Board;
 import com.blog.domain.File;
 import com.blog.model.FileStore;
