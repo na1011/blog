@@ -27,10 +27,12 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final FileService fileService;
 
     // 게시글 셍성
     @Transactional
     public void createBoard(BoardSaveDto boardSaveDto, Member member) {
+        // 게시글 저장
         Board board = Board.builder()
                 .memberId(member.getMemberId())
                 .boardWriter(member.getMemberNm())
@@ -38,6 +40,9 @@ public class BoardService {
                 .boardContent(boardSaveDto.getBoardContent())
                 .build();
         boardRepository.save(board);
+
+        // 파일 저장 (트랜잭션 참여)
+        fileService.createFile(boardSaveDto, board);
     }
 
     // 게시글 모두 조회 (페이징 처리)
